@@ -19,6 +19,11 @@ const NavBar = () => {
           <a>Our Shop</a>
         </li>
       </Link>
+      <Link to="/login">
+        <li>
+          <a>Login</a>
+        </li>
+      </Link>
     </>
   );
 

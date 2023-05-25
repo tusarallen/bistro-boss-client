@@ -8,12 +8,16 @@ const FoodCard = ({ item }) => {
       <figure>
         <img src={image} alt="Food" />
       </figure>
-      <p className="bg-slate-900 text-white right-0 absolute p-2 rounded-md font-bold mr-4 mt-2">${price}</p>
+      <p className="bg-slate-900 text-white right-0 absolute p-2 rounded-md font-bold mr-4 mt-2">
+        ${price}
+      </p>
       <div className="card-body">
         <h2 className="text-2xl font-bold text-center">{name}</h2>
         <p>{recipe}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-primary md:mr-24 mt-4">Add to Cart</button>
+          <button className="btn btn-outline border-0 border-orange-400 hover:border-orange-400 bg-slate-100 border-b-4 md:mr-24 mt-4">
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>
