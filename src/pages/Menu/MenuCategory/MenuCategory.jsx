@@ -1,8 +1,10 @@
 import React from "react";
 import ItemMenu from "../../Shared/ItemMenu/ItemMenu";
 import Cover from "../../Shared/Cover/Cover";
+import { Link } from "react-router-dom";
 
 const MenuCategory = ({ items, title, img }) => {
+  console.log(title);
   return (
     <div className="my-12">
       {title && <Cover img={img} title={title} />}
@@ -12,9 +14,13 @@ const MenuCategory = ({ items, title, img }) => {
         ))}
       </div>
       <div className="flex justify-center items-center">
-        <button className="btn btn-outline border-0 border-b-4">
-          ORDER YOUR FAVOURITE FOOD
-        </button>
+        {title && (
+          <Link to={`/order/${title}`}>
+            <button className="btn btn-outline border-0 border-b-4">
+              ORDER YOUR FAVOURITE FOOD
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );
