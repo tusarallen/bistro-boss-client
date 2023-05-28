@@ -108,9 +108,10 @@ const Login = () => {
                   className="input input-bordered"
                 />
               </div>
+              {/* TODO: make button disabled for captcha */}
               <div className="form-control mt-4">
                 <input
-                  disabled={disabled}
+                  disabled={false}
                   className="btn btn-primary"
                   type="submit"
                   value="Login"
