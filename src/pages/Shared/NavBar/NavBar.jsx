@@ -36,7 +36,7 @@ const NavBar = () => {
           <a>Secret</a>
         </li>
       </Link>
-      <Link to="/">
+      <Link to="/dashboard/mycart">
         <li>
           <button>
             <FaShoppingCart style={{ fontSize: "20px" }} />
