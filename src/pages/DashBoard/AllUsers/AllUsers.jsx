@@ -6,17 +6,16 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AllUsers = () => {
-  const { axiosSecure } = useAxiosSecure();
+  const [axiosSecure] = useAxiosSecure();
   const { data: users = [], refetch } = useQuery(["users"], async () => {
     const res = await axiosSecure.get("/users");
     return res.data;
   });
-
+  console.log(users);
   const handleMakeAdmin = (user) => {
-    fetch(`http://localhost:5000/users/admin/${user._id}`, {
-      method: "PATCH",
-    })
-      .then((res) => res.json())
+    axiosSecure
+      .patch(`/users/admin/${user._id}`)
+      .then((res) => res.data)
       .then((data) => {
         console.log(data);
         if (data.modifiedCount) {
@@ -29,9 +28,35 @@ const AllUsers = () => {
             timer: 1000,
           });
         }
+      })
+      .catch((error) => {
+        // Handle error here
+        console.error(error);
       });
   };
 
+  const handleRemoveAdmin = (user) => {
+    axiosSecure
+      .put(`/users/admin/${user._id}`)
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+        if (data.modifiedCount) {
+          refetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${user.name} is remove from admin now!`,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      })
+      .catch((error) => {
+        // Handle error here
+        console.error(error);
+      });
+  };
   const handleDelete = (user) => {};
 
   return (
@@ -59,8 +84,13 @@ const AllUsers = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  {user.role === "admin" ? (
-                    "admin"
+                  {user?.role === "admin" ? (
+                    <button
+                      onClick={() => handleRemoveAdmin(user)}
+                      className="font-bold btn-warning text-xl rounded-md p-1"
+                    >
+                      Remove Admin
+                    </button>
                   ) : (
                     <button onClick={() => handleMakeAdmin(user)}>
                       <FaUserShield style={{ fontSize: "33px" }} />

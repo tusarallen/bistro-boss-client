@@ -20,6 +20,7 @@ const Dashboard = () => {
   // TODO: load data from the server to have dynamic isAdmin based on data
   // const isAdmin = true;
   const [isAdmin] = useAdmin();
+  console.log(isAdmin);
 
   return (
     <div className="drawer drawer-mobile">
@@ -44,8 +45,8 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/reservation">
-                  <FaUtensils /> Add Items
+                <NavLink to="/dashboard/additems">
+                  <FaUtensils /> Add an Items
                 </NavLink>
               </li>
               <li>
