@@ -1,15 +1,14 @@
 import React from "react";
 import TitleSection from "../../../components/TitleSection/TitleSection";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const image_hosting_token = import.meta.env.VITE_Image_Upload_Token;
 
 const AddItem = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [axiosSecure] = useAxiosSecure();
+  const { register, handleSubmit ,reset } = useForm();
 
   const image_hosting_url = `https://api.imgbb.com/1/upload?key=${image_hosting_token}`;
 
@@ -33,11 +32,23 @@ const AddItem = () => {
             category,
             image: imgUrl,
           };
-          console.log(newItem);
+          axiosSecure.post("/menu", newItem).then((data) => {
+            console.log(data.data);
+            if (data.data.insertedId) {
+              reset();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your Food Add On The Cart",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
         }
       });
   };
-  
+
   return (
     <div className="w-full px-10 mt-44">
       <div className="w-full inline-block">
