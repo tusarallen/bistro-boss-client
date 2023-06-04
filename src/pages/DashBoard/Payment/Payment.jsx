@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import TitleSection from "../../../components/TitleSection/TitleSection";
 import { loadStripe } from "@stripe/stripe-js";
