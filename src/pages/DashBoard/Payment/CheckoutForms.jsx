@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+import "./CheckoutForms.css";
 
-const CheckoutForms = ({ price }) => {
+const CheckoutForms = ({ cart, price }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { user } = useAuth();
@@ -15,11 +17,12 @@ const CheckoutForms = ({ price }) => {
   const [transactionId, setTransactionId] = useState("");
 
   useEffect(() => {
-    console.log(price);
-    axiosSecure.post("/create-payment-intent", { price }).then((res) => {
-      console.log(res.data.clientSecret);
-      setClientSecret(res.data.clientSecret);
-    });
+    if (price > 0) {
+      axiosSecure.post("/create-payment-intent", { price }).then((res) => {
+        console.log(res.data.clientSecret);
+        setClientSecret(res.data.clientSecret);
+      });
+    }
   }, [price, axiosSecure]);
 
   const handleSubmit = async (event) => {
@@ -68,7 +71,30 @@ const CheckoutForms = ({ price }) => {
     setProcessing(false);
     if (paymentIntent.status === "succeeded") {
       setTransactionId(paymentIntent.id);
-      // TODO next steps
+      // save payment information to the server
+      const payment = {
+        email: user?.email,
+        transactionId: paymentIntent.id,
+        price: parseInt(price),
+        date: new Date(),
+        quantity: cart.length,
+        caetItems: cart.map((item) => item._id),
+        manuItems: cart.map((item) => item.menuItemId),
+        status: "service pending",
+        itemName: cart.map((item) => item.name),
+      };
+      axiosSecure.post("/payments", payment).then((res) => {
+        console.log(res.data);
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "User Created Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     }
   };
 
@@ -92,7 +118,7 @@ const CheckoutForms = ({ price }) => {
           }}
         />
         <button
-          className="btn btn-primary font-bold mt-12 rounded-md flex mx-auto"
+          className="btn btn-primary font-bold mt-6 rounded-md flex mx-auto"
           type="submit"
           disabled={!stripe || !clientSecret || processing}
         >
