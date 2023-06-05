@@ -2,8 +2,8 @@ import React from "react";
 import {
   FaBook,
   FaCalendarAlt,
+  FaCcStripe,
   FaHome,
-  FaPaypal,
   FaShoppingBasket,
   FaShoppingCart,
   FaUsers,
@@ -40,7 +40,7 @@ const Dashboard = () => {
           {isAdmin ? (
             <>
               <li>
-                <NavLink to="/dashboard/home">
+                <NavLink to="/dashboard/adminhome">
                   <FaHome /> Admin Home
                 </NavLink>
               </li>
@@ -68,7 +68,7 @@ const Dashboard = () => {
           ) : (
             <>
               <li>
-                <NavLink to="/dashboard/home">
+                <NavLink to="/dashboard/userhome">
                   <FaHome /> User Home
                 </NavLink>
               </li>
@@ -93,6 +93,7 @@ const Dashboard = () => {
             </>
           )}
           <div className="divider"></div>
+          {/* common part for user and admin */}
           <li>
             <NavLink to="/">
               <FaHome /> Home
@@ -108,7 +109,7 @@ const Dashboard = () => {
           <NavLink to="/order/salad">
             <li>
               <a>
-                <FaPaypal />
+                <FaCcStripe style={{ fontSize: "25px" }} />
                 Order Food
               </a>
             </li>

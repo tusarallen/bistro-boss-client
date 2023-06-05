@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { FaShoppingCart } from "react-icons/fa";
 import useCart from "../../../hooks/useCart";
+import useAdmin from "../../../hooks/useAdmin";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [cart] = useCart();
+  const [isAdmin] = useAdmin();
 
   const handleLogOut = () => {
     logOut()
@@ -16,34 +18,36 @@ const NavBar = () => {
 
   const navOptions = (
     <>
-      <Link to="/">
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/menu">Our Menu</Link>
+      </li>
+      <li>
+        <Link to="/order/salad">Order Food</Link>
+      </li>
+      {isAdmin ? (
         <li>
-          <a>Home</a>
+          <Link to="/dashboard/adminhome">Dashboard</Link>
         </li>
-      </Link>
-      <Link to="/menu">
+      ) : (
         <li>
-          <a>Our Menu</a>
+          <Link to="/dashboard/userhome">Dashboard</Link>
         </li>
-      </Link>
-      <Link to="/order/salad">
-        <li>
-          <a>Order Food</a>
-        </li>
-      </Link>
-      <Link to="/secret">
-        <li>
-          <a>Secret</a>
-        </li>
-      </Link>
-      <Link to="/dashboard/mycart">
-        <li>
+      )}
+      <li>
+        <Link to="/dashboard/mycart">
           <button>
-            <FaShoppingCart style={{ fontSize: "20px" }} />
-            <div className="badge badge-secondary">+{cart?.length || 0}</div>
+            <div className="flex gap-4">
+              <div>
+                <FaShoppingCart style={{ fontSize: "20px" }} />
+              </div>
+              <div className="badge badge-secondary">+{cart?.length || 0}</div>
+            </div>
           </button>
-        </li>
-      </Link>
+        </Link>
+      </li>
       {user ? (
         <>
           <button onClick={handleLogOut} className="btn btn-ghost">
@@ -52,11 +56,9 @@ const NavBar = () => {
         </>
       ) : (
         <>
-          <Link to="/login">
-            <li>
-              <a>Login</a>
-            </li>
-          </Link>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
         </>
       )}
     </>
